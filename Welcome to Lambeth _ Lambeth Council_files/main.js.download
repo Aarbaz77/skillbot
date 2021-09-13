@@ -1,0 +1,590 @@
+(function () {
+
+    if (window.NodeList && !NodeList.prototype.forEach) {
+        NodeList.prototype.forEach = Array.prototype.forEach;
+    }
+
+    if (!Element.prototype.matches) {
+        Element.prototype.matches =
+        Element.prototype.msMatchesSelector ||
+        Element.prototype.webkitMatchesSelector;
+    }
+
+    if (!Element.prototype.closest) {
+        Element.prototype.closest = function(s) {
+            var el = this;
+
+            do {
+            if (Element.prototype.matches.call(el, s)) return el;
+            el = el.parentElement || el.parentNode;
+            } while (el !== null && el.nodeType === 1);
+            return null;
+        };
+    }
+
+    if (!Number.isNan) {
+      Object.defineProperty(Number, 'isNaN', {
+        value: function(value) {
+          return value !== value;
+        }
+      });
+    }
+
+  // SLIDE OUT NAV
+  slideOutNav()
+  filterToggle()
+  tabNav()
+
+  // FORM
+  formTypeSubmit()
+  formOrderSubmit()
+
+  // TABS
+  tabs()
+
+  // JOB URL COPY
+  jobCopy()
+
+  // RELATED SWIPER
+  if ( window.innerWidth < 768 ) {
+    relatedSwiper()
+    browseSwiper()
+  }
+
+  partnerSwiper()
+
+  // SECTION SELECT
+  sectionSelect()
+
+
+  // HOMEPAGE ELIGIBILITY CHECKER
+  eligibilityChecker()
+
+  // HOMEPAGE - SCROLL DOWN
+  scrollDown()
+
+  // FROM JUMP DOWN
+  formDown()
+
+}) ();
+
+function formTypeSubmit () {
+
+    let form = document.querySelector('.searchJob')
+    let types = document.querySelectorAll('.sidebar__checkbox input')
+
+    if ( form && types ) {
+
+        types.forEach( function ( type ) {
+
+            type.addEventListener('change', function () {
+
+                form.submit()
+
+            })
+
+        })
+
+    }
+
+}
+
+function formOrderSubmit () {
+
+    let form = document.querySelector('.searchJob')
+    let order = document.querySelector('.searchOrder')
+
+    if ( form && order ) {
+
+        order.addEventListener('change', function () {
+
+            form.submit()
+
+        })
+
+    }
+
+}
+
+function tabs () {
+
+    let tabs = document.querySelectorAll('.tab')
+    let tabsContent = document.querySelectorAll('.tab__content-inner')
+
+    if ( tabs ) {
+
+        tabs.forEach( function ( tab, i ) {
+
+            tab.addEventListener( 'click', function ( ev ) {
+                ev.preventDefault()
+
+                if ( !tab.classList.contains('tab--active') ) {
+
+                    tabs.forEach( function ( tab, i ) {
+                        tab.classList.remove('tab--active')
+                        tabsContent[i].classList.remove('tab__content-inner--active')
+                    })
+
+                    tab.classList.add('tab--active')
+                    tabsContent[i].classList.add('tab__content-inner--active')
+                }
+            } )
+
+        })
+
+    }
+
+}
+
+function jobCopy () {
+
+    let clipboard = document.querySelector('.copy__submit')
+
+    if ( clipboard ) {
+      clipboard.addEventListener('click', function ( ev ) {
+        ev.preventDefault()
+
+        let copyText = document.querySelector('.copy__input')
+        copyText.select()
+        copyText.setSelectionRange(0, 99999)
+
+        document.execCommand("copy")
+
+        this.textContent = 'Copied'
+      })
+    }
+
+}
+
+function slideOutNav () {
+
+    let body = document.querySelector('body')
+    let header = document.querySelector('.header')
+    let main = document.querySelector('.main')
+    let more = document.querySelector('.nav--more')
+    let close = document.querySelector('.slide-close')
+    let slide = document.querySelector('.nav--slide-out-wrap')
+    let slideClick = document.querySelector('.nav--slide-out-bg')
+
+    if ( more ) {
+
+        more.addEventListener('click', function ( ev ) {
+            ev.preventDefault()
+            body.classList.add('no-scroll')
+            header.classList.add('slide__right')
+
+            setTimeout( function () {
+                header.classList.add('slide__right--go')
+                main.classList.add('slide__right')
+                slide.classList.add('show')
+            }, 1)
+        })
+
+    }
+
+    if ( close ) {
+
+        close.addEventListener('click', function ( ev ) {
+            ev.preventDefault()
+            body.classList.remove('no-scroll')
+            header.classList.remove('slide__right--go')
+            main.classList.remove('slide__right')
+            slide.classList.remove('show')
+
+            setTimeout( function () {
+                header.classList.remove('slide__right')
+            }, 500)
+        })
+
+    }
+
+    if ( slideClick ) {
+
+        slideClick.addEventListener('click', function ( ev ) {
+            ev.preventDefault()
+            body.classList.remove('no-scroll')
+            header.classList.remove('slide__right--go')
+            main.classList.remove('slide__right')
+            slide.classList.remove('show')
+
+            setTimeout( function () {
+                header.classList.remove('slide__right')
+            }, 500)
+        })
+
+    }
+
+}
+
+function filterToggle () {
+
+    let body = document.querySelector('body')
+    let header = document.querySelector('.header')
+    let main = document.querySelector('.main')
+    let more = document.querySelector('.filter-toggle')
+    let close = document.querySelector('.sidebars-close')
+    let slide = document.querySelector('.sidebars')
+
+    if ( more ) {
+
+        more.addEventListener('click', function ( ev ) {
+            ev.preventDefault()
+            body.classList.add('no-scroll')
+            header.classList.add('slide__left')
+            main.classList.add('slide__left')
+
+            setTimeout( function () {
+                header.classList.add('slide__left--go')
+                slide.classList.add('show')
+            }, 1)
+        })
+
+    }
+
+    if ( close ) {
+
+        close.addEventListener('click', function ( ev ) {
+            ev.preventDefault()
+            body.classList.remove('no-scroll')
+            header.classList.remove('slide__left--go')
+            main.classList.remove('slide__left')
+            slide.classList.remove('show')
+
+            setTimeout( function () {
+                header.classList.remove('slide__left')
+            }, 500)
+        })
+
+    }
+
+}
+
+function tabNav () {
+
+    let parent = document.querySelectorAll('.menu-item-has-children > a, .sidebar__header--list')
+
+    if ( parent ) {
+
+        parent.forEach( function ( item ) {
+            let clickItem, subMenu
+            if ( item.classList.contains('sidebar__header') ) {
+                clickItem = item
+                subMenu = item.nextElementSibling
+            } else {
+                clickItem = item.parentNode
+                subMenu = item.parentNode.querySelector('.sub-menu')
+            }
+
+            item.addEventListener('click', function ( ev ) {
+                ev.preventDefault()
+
+                if ( clickItem.classList.contains('open') ) {
+                    clickItem.classList.remove('open')
+                    subMenu.classList.remove('open')
+                } else {
+                    clickItem.classList.add('open')
+                    subMenu.classList.add('open')
+                }
+            })
+
+        } )
+
+    }
+
+}
+
+function relatedSwiper () {
+    var relatedSwiper = new Swiper('.related-swiper', {
+        spaceBetween: 20,
+        slidesPerView: 'auto'
+    })
+}
+
+function partnerSwiper () {
+    var partnerSwiper = new Swiper('.partner-swiper', {
+        spaceBetween: 30,
+        slidesPerView: '2',
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            480: {
+              slidesPerView: 2,
+              spaceBetween: 40
+            },
+            768: {
+              slidesPerView: 5,
+              spaceBetween: 60
+            }
+        }
+    })
+}
+
+function browseSwiper () {
+    var partnerSwiper = new Swiper('.browse-swiper', {
+        spaceBetween: 0,
+        slidesPerView: '2',
+    })
+}
+
+function sectionSelect () {
+    let sectionSelect = document.querySelector('.section-select')
+
+    if ( sectionSelect ) {
+        sectionSelect.addEventListener( 'change', function ( ev ) {
+            window.location.href = sectionSelect.value
+        })
+    }
+}
+
+
+// ELIGIBILITY CHECKER
+function eligibilityChecker () {
+
+    setTimeout( function () {
+        eligibilityCheckerCheck()
+    }, 500)
+
+}
+
+function eligibilityCheckerCheck () {
+    let openChecker = document.querySelector('.openChecker')
+    let openCheckerOverlay = document.querySelector('.eligibility__overlay')
+    let checkerForm = document.querySelector('.single__form')
+
+    if( openChecker ) {
+
+        openChecker.addEventListener( 'click', function ( ev ) {
+
+            ev.preventDefault()
+            openCheckerOverlay.classList.add('active')
+
+            checkEligibility( 'popup' )
+            eligibilityCheckClose()
+            setEligibilityMessage('initial', 'popup')
+            invalidPostcode('clear')
+
+        });
+    }
+
+    if( checkerForm ) {
+        setTimeout( function () {
+            checkEligibility( 'form' )
+            singleFormCriteriaCheckbox()
+        }, 500)
+    }
+}
+
+// POPUP CLOSING HANDLE
+function eligibilityCheckClose () {
+
+    let overlay = document.querySelector('.eligibility__overlay')
+    let contentClose = document.querySelector('.eligibility__close')
+
+    overlay.addEventListener( 'click', function (ev) {
+
+        if (ev.target == overlay) {
+            this.classList.remove('active')
+        }
+
+    } )
+
+    contentClose.addEventListener( 'click', function (ev) {
+        overlay.classList.remove('active')
+    })
+}
+
+// HANDLE POSTCODE INPUT
+function checkEligibility ( type ) {
+
+    let postCodeCheck =  document.querySelector('#pc');
+    let postCodeSubmit = document.querySelector('.pcSubmit');
+
+    postCodeSubmit.addEventListener( 'click', function () {
+
+        if ( postCodeCheck.value ) {
+            fetchPostcode(postCodeCheck.value, type)
+        } else {
+            invalidPostcode('error')
+        }
+
+    })
+}
+
+// POSTCODE FETCH
+function fetchPostcode ( postcode, type ) {
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+      if (this.readyState === 4 && this.status === 200) {
+        checkPostcode(JSON.parse(this.responseText), type)
+      } else if ( this.status === 404 ) {
+        invalidPostcode('error')
+      }
+    };
+    xmlhttp.open('GET', 'https://api.postcodes.io/postcodes/'+postcode);
+    xmlhttp.send();
+
+}
+
+// CHECK IF ELIGIBLE
+function checkPostcode ( result, type ) {
+    let borough = result.result.admin_district
+
+    if ( borough == 'Southwark') {
+
+        if( type == 'popup' ) {
+            resultTrasition()
+        }
+
+        if( type == 'form') {
+            activateFromFields('add')
+        }
+
+        setTimeout( function () {
+            setEligibilityMessage('passed', type)
+        }, 400);
+
+    } else {
+
+        if( type == 'popup' ) {
+            resultTrasition()
+        }
+
+        setTimeout( function () {
+            setEligibilityMessage('failed', type)
+        }, 400);
+
+    }
+}
+
+function setEligibilityMessage ( message, type ) {
+    let initial = document.querySelector('.eligibility__pre')
+    let passed = document.querySelector('.eligibility__pass')
+    let failed = document.querySelector('.eligibility__fail')
+
+    if( type == "popup" ) {
+        initial.classList.remove('active')
+    }
+    passed.classList.remove('active')
+    failed.classList.remove('active')
+
+    if( message == "initial" && type == 'popup' ) {
+        initial.classList.add('active')
+    }
+
+    if( message == "passed" ) {
+        passed.classList.add('active')
+    }
+
+    if( message == "failed" ) {
+        failed.classList.add('active')
+    }
+}
+
+// POSTCODE VIEW CHANGE
+function resultTrasition () {
+    let popup = document.querySelector('.eligibility__overlay-content')
+
+    popup.classList.add('result-transition')
+    setTimeout( function () {
+        popup.classList.remove('result-transition')
+    }, 400);
+}
+
+// POSTCODE ERROR HANDLE
+function invalidPostcode ( status ) {
+    let postcodeError = document.querySelector('.eligibility__error')
+
+    if( status == 'error' ) {
+        postcodeError.classList.add('active')
+    } else if( status == 'clear' ) {
+        postcodeError.classList.remove('active')
+    }
+
+}
+
+function activateFromFields ( toggle ) {
+    let fields = document.querySelectorAll('.form-hidden');
+
+    if ( toggle == 'add' ) {
+
+        fields.forEach( function (field, i ) {
+            field.classList.add('active')
+        })
+
+    } else if ( toggle == 'remove' ) {
+
+        fields.forEach( function (field, i ) {
+            field.classList.remove('active')
+        })
+
+    }
+}
+
+function singleFormCriteriaCheckbox () {
+    let checkbox = document.querySelector('.single__meet-criteria')
+    let checkboxCont = document.querySelector('.single__meet-criteria-cont')
+
+    checkbox.addEventListener( 'click', function (ev) {
+        console.log('click')
+        if ( checkboxCont.classList.contains('active') ) {
+            console.log( 'we off' )
+            activateFromFields('remove')
+            checkboxCont.classList.remove('active')
+        } else {
+            console.log( 'we active' )
+            activateFromFields('add')
+            checkboxCont.classList.add('active')
+        }
+    })
+}
+
+function scrollDown () {
+    let btn = document.querySelector('.scroll-down a')
+    let block = document.querySelectorAll('.container.block')
+
+    if ( btn ) {
+
+        btn.addEventListener( 'click', function ( ev ) {
+            ev.preventDefault()
+
+            window.scrollTo({
+                top: block[1].offsetTop,
+                behavior: 'smooth',
+            })
+        })
+
+    }
+}
+
+function formDown () {
+    let btn = document.querySelector('.js-form')
+    let form = document.querySelector('.single__form')
+
+    if ( btn ) {
+
+        btn.addEventListener( 'click', function ( ev ) {
+            ev.preventDefault()
+
+            window.scrollTo({
+                top: form.offsetTop,
+                behavior: 'smooth',
+            })
+        })
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
