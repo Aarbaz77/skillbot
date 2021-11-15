@@ -1,6 +1,9 @@
 
 
 /* ============= css related to chats =============== */
+.link-box{
+  font-weight: bold;
+}
 
 .widget {
   display: none;
@@ -935,3 +938,4 @@ a.morelink {
 .morecontent span {
 	display: none;
 } */
+
