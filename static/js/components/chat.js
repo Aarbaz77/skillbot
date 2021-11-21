@@ -27,12 +27,20 @@ function myFunction(el) {
   $(el).prev().toggle();
   $(el).siblings('.dots').toggle();
   if($(el).text()==" Read More"){
-    $(el).text('Read Less');
+    $(el).text(' Read Less');
   }
   else{
     $(el).text(' Read More');
   }
 }
+function urlify(text) {
+    var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+    return text.replace(urlRegex, function(url) {
+      return "</br><a href="+url+" target='_blank'>"+url+"  </a></br></br>";
+    })
+    // or alternatively
+    // return text.replace(urlRegex, '<a href="$1">$1</a>')
+  }
 /**
  * returns formatted bot response
  * @param {String} text bot message response's text
@@ -114,7 +122,17 @@ function setBotResponse(response) {
                               console.log(response[i].text.length)
                               content = response[i].text
                               content = content.replace(/(?:\r\n|\r|\n)/g, '<br>')
-                              showChar = 120
+                              content = urlify(content)
+//                               var hlink = /\s(ht|f)tp:\/\/([^ \,\;\:\!\)\(\"\'\<\>\f\n\r\t\v])+/g;
+//                               content = content.replace (hlink, function ($0,$1,$2) { content = $0.substring(1,$0.length); 
+//                                 // remove trailing dots, if any
+//                                 while (content.length>0 && content.charAt(s.length-1)=='.') 
+//                                    content=content.substring(0,content.length-1);
+//                                 // add hlink
+//                                 return " " + content.link(content); 
+//                               }
+//   ) 
+                              showChar = 5000
                               const firstPart = content.substr(0, showChar);
                               const morePart = content.substr(showChar, content.length - showChar);
                               console.log(firstPart)
@@ -261,7 +279,7 @@ function setBotResponse(response) {
 function send(message) {
     $.ajax({
         url: rasa_server_url,
-        headers: {  'Access-Control-Allow-Origin': 'http://34.125.94.107' },
+        headers: {  'Access-Control-Allow-Origin': 'http://52.56.102.72' },
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({ message, sender: sender_id }),
