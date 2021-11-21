@@ -36,7 +36,11 @@ function myFunction(el) {
 function urlify(text) {
     var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
     return text.replace(urlRegex, function(url) {
+<<<<<<< HEAD
       return "</br><a href="+url+" target='_blank'>"+url+"  </a></br></br>";
+=======
+      return "</br><a href="+url+" target='_blank'>"+url+"  </a></br>";
+>>>>>>> 700974def1fc9f0040ac7428e885e8018ee71a4a
     })
     // or alternatively
     // return text.replace(urlRegex, '<a href="$1">$1</a>')
@@ -132,7 +136,11 @@ function setBotResponse(response) {
 //                                 return " " + content.link(content); 
 //                               }
 //   ) 
+<<<<<<< HEAD
                               showChar = 5000
+=======
+                              showChar = 120
+>>>>>>> 700974def1fc9f0040ac7428e885e8018ee71a4a
                               const firstPart = content.substr(0, showChar);
                               const morePart = content.substr(showChar, content.length - showChar);
                               console.log(firstPart)
