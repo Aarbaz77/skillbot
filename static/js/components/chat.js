@@ -46,14 +46,18 @@ function urlify(text) {
  * @param {String} text bot message response's text
  *
  */
+
+
 function getBotResponse(text) {
     console.log(text.length)
     console.log(text)
     var content = text
     var showChar = 120
+
     const firstPart = content.substr(0, showChar);
     const morePart = content.substr(showChar, content.length - showChar);
     console.log(firstPart)
+    checkMsgs(firstPart)
     console.log(morePart)
     if(content.length>showChar){
       botResponse = `<img class="botAvatar" src="./static/img/chatlogo.jpg"/><p class="botMsg"><span>${firstPart}</span><span class="dots">...</span><span class="more">${morePart}</span><button onclick=myFunction(this) class="read"> Read More</button></p><div class="clearfix"></div>`;
@@ -124,19 +128,20 @@ function setBotResponse(response) {
                               content = content.replace(/(?:\r\n|\r|\n)/g, '<br>')
                               content = urlify(content)
 //                               var hlink = /\s(ht|f)tp:\/\/([^ \,\;\:\!\)\(\"\'\<\>\f\n\r\t\v])+/g;
-//                               content = content.replace (hlink, function ($0,$1,$2) { content = $0.substring(1,$0.length); 
+//                               content = content.replace (hlink, function ($0,$1,$2) { content = $0.substring(1,$0.length);
 //                                 // remove trailing dots, if any
-//                                 while (content.length>0 && content.charAt(s.length-1)=='.') 
+//                                 while (content.length>0 && content.charAt(s.length-1)=='.')
 //                                    content=content.substring(0,content.length-1);
 //                                 // add hlink
-//                                 return " " + content.link(content); 
+//                                 return " " + content.link(content);
 //                               }
-//   ) 
+//   )
                               showChar = 5000
                               const firstPart = content.substr(0, showChar);
                               const morePart = content.substr(showChar, content.length - showChar);
                               console.log(firstPart)
                               console.log(morePart)
+                              checkMsgs(firstPart)
                               if(content.length>showChar){
                                 botResponse = `<img class="botAvatar" src="./static/img/chatlogo.jpg"/><p class="botMsg"><span>${firstPart}</span><span class="dots">...</span><span class="more">${morePart}</span><button onclick=myFunction(this) class="read"> Read More</button></p><div class="clearfix"></div>`;
                               }
@@ -271,7 +276,21 @@ function setBotResponse(response) {
     }, 500);
 
 }
+function checkMsgs(text){
+  console.log("This is called")
+  console.log(text)
+  if (text == "Please enter"){
+    document.getElementById("wholeTextdiv").style.display = "block";
+    // document.getElementById("userInput").disabled = false;
+    // document.getElementById("userInput").style.display = "block";
+  }
+  else {
+    document.getElementById("wholeTextdiv").style.display = "none";
+    // document.getElementById("userInput").disabled = true;
+    // document.getElementById("userInput").style.display = "none";
+  }
 
+}
 /**
  * sends the user message to the rasa server,
  * @param {String} message user message
@@ -411,7 +430,7 @@ function isEmpty( el ){
   }
 
 function startChat(){
-  const text = "Hi";
+  const text = "/greet";
   // send(text)
     if (isEmpty($('#chats'))){
     send(text)
